@@ -11,7 +11,7 @@ if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
 
-define('XSELL_CURRENT_VERSION', '2.0.0-beta1');
+define('XSELL_CURRENT_VERSION', '2.0.0-beta2');
 
 // -----
 // Only update configuration when an admin is logged in.
@@ -111,6 +111,39 @@ if (XSELL_VERSION !== XSELL_CURRENT_VERSION) {
           WHERE configuration_key = 'XSELL_VERSION'
           LIMIT 1"
     );
+    
+    // -----
+    // Previous versions of the various "Cross Sell" plugins might have left duplicates in the products_xsell
+    // table; let's remove them.
+    //
+    switch (true) {
+        case version_compare(XSELL_VERSION, '2.0.0', '<'):
+            $xsells = $db->Execute(
+                "SELECT *
+                   FROM " . TABLE_PRODUCTS_XSELL . "
+                  ORDER BY `ID` ASC"
+            );
+            $xsells_found = [];
+            $xsells_removed = 0;
+            foreach ($xsells as $next_xsell) {
+                if (!in_array($next_xsell['products_id'] . '^' . $next_xsell['xsell_id'], $xsells_found)) {
+                    $xsells_found[] = $next_xsell['products_id'] . '^' . $next_xsell['xsell_id'];
+                } else {
+                    $xsells_removed++;
+                    $db->Execute(
+                        "DELETE FROM " . TABLE_XSELL . "
+                          WHERE `ID` = " . $next_xsell['ID'] . "
+                          LIMIT 1"
+                    );
+                }
+            }
+            if ($xsells_removed !== 0) {
+                $messageStack->add_session(sprintf(MESSAGE_XSELL_DUPLICATES_REMOVED, $xsells_removed), 'warning');
+            }
+        default:                                            //-Fall-through from the above processing.
+            break;
+    }
+
     if (XSELL_VERSION === '0.0.0') {
         $messageStack->add_session(sprintf(MESSAGE_XSELL_INSTALLED, XSELL_CURRENT_VERSION), 'success');
     } else {
