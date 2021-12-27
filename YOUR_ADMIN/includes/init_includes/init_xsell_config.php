@@ -1,117 +1,119 @@
 <?php
-/**
- * Cross Sell Advanced
- *
- * @copyright 2013 C Jones
- * @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
- * @version $Id: init_xsell_config.php v1.2 01/20/2014 C Jones $
- */
+// -----
+// Cross Sell Advanced, v2.0.0 for Zen Cart v1.5.7 and later
+//
+// @copyright 2013 C Jones
+// $copyright 2021, lat9 (https://vinosdefrutastropicales.com).
+// @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
+// @version $Id: init_xsell_config.php v2.0.0, 2021-12-24, lat9 $
+//
+if (!defined('IS_ADMIN_FLAG')) {
+    die('Illegal Access');
+}
 
-//-- CREATE XSELL SUPPORT TABLES
-$sql = "CREATE TABLE IF NOT EXISTS ".DB_PREFIX."products_xsell (
-  ID int(10) NOT NULL auto_increment,
-  products_id int(10) unsigned NOT NULL default 1,
-  xsell_id int(10) unsigned NOT NULL default 1,
-  sort_order int(10) unsigned NOT NULL default 1,
-  PRIMARY KEY  (ID), 
-  KEY idx_products_id_xsell (products_id)
-)";
-    $db->Execute($sql);
-// -- --------------------------------------------------------
+define('XSELL_CURRENT_VERSION', '2.0.0-beta1');
 
+// -----
+// Only update configuration when an admin is logged in.
+//
+if (!isset($_SESSION['admin_id'])) {
+    return;
+}
 
-    $xsell_old_menu_title = 'Cross Sell';
-    $xsell_menu_title = 'Cross Sell Advanced';
-    $xsell_menu_text = 'Cross Sell Advanced Configuration';
+// -----
+// First, see if the older (Cross Sell) plugin is installed and, if so, remove its associated
+// configuration settings.
+//
+$result = $db->Execute(
+    "SELECT configuration_group_id
+       FROM " . TABLE_CONFIGURATION_GROUP . "
+      WHERE configuration_group_title = 'Cross Sell'
+      LIMIT 1"
+);
+if (!$result->EOF) {
+    $old_cgi = $result->fields['configuration_group_id'];
+    $db->Execute("DELETE FROM " . TABLE_CONFIGURATION . " WHERE configuration_group_id = $old_cgi");
+    $db->Execute("DELETE FROM " . TABLE_CONFIGURATION_GROUP . " WHERE configuration_group_id = $old_cgi");
+    zen_deregister_admin_pages('configXSELL');
+}
 
-    	/* Find configuation group ID of Previous Version of Cross Sell */
-    	$sql = "SELECT configuration_group_id FROM ".TABLE_CONFIGURATION_GROUP." WHERE configuration_group_title='".$xsell_old_menu_title."' LIMIT 1";
-    	$result = $db->Execute($sql);
-        $xsell_old_configuration_id = $result->fields['configuration_group_id'];
+// -----
+// Now, check to see if the Cross Sell Advanced configuration has been previously set, adding the plugin's
+// configuration settings if not.
+//
+$result = $db->Execute(
+    "SELECT configuration_group_id
+       FROM " . TABLE_CONFIGURATION_GROUP . "
+      WHERE configuration_group_title = 'Cross Sell Advanced'
+      LIMIT 1"
+);
+if (!$result->EOF) {
+    $cgi = $result->fields['configuration_group_id'];
+} else {
+    $db->Execute(
+        "INSERT INTO " . TABLE_CONFIGURATION_GROUP . "
+            (configuration_group_title, configuration_group_description, sort_order, visible)
+         VALUES
+            ('Cross Sell Advanced', 'Cross Sell Advanced Configuration', 0, 1)"
+    );
+    $cgi = $db->Insert_ID();
+    $db->Execute(
+        "UPDATE " . TABLE_CONFIGURATION_GROUP . "
+            SET sort_order = $cgi
+          WHERE configuration_group_id = $cgi
+          LIMIT 1"
+    );
+    $db->Execute(
+        "INSERT INTO " . TABLE_CONFIGURATION . "
+            (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added, use_function, set_function)
+         VALUES
+            ('Display Cross-Sell Products Minimum', 'MIN_DISPLAY_XSELL', '1', 'This is the minimum number of configured Cross-Sell products required in order to cause the Cross Sell information to be displayed.<br>Default: 1', $cgi, 20, now(), NULL, NULL),
 
-    	/* Remove Previous Version of Cross Sell from the configuration group table */
-    	$sql = "DELETE FROM ".TABLE_CONFIGURATION_GROUP." WHERE configuration_group_id ='".$xsell_old_configuration_id."'";
-        $db->Execute($sql);
+            ('Display Cross-Sell Products Maximum', 'MAX_DISPLAY_XSELL', '6', 'This is the maximum number of configured Cross-Sell products to be displayed.<br>Default: 6', $cgi, 25, now(), NULL, NULL),
 
-    	/* Remove Previous Version of Cross Sell items from the configuration table */
-    	$sql = "DELETE FROM ".TABLE_CONFIGURATION." WHERE configuration_group_id ='".$xsell_old_configuration_id."'";
-        $db->Execute($sql);
+            ('Cross-Sell Products Columns per Row', 'SHOW_PRODUCT_INFO_COLUMNS_XSELL_PRODUCTS', '3', 'Cross-Sell Products Columns to display per Row<br>0= off or set the sort order.<br>Default: 3', $cgi, 30, now(), NULL, 'zen_cfg_select_option(array(\'0\', \'1\', \'2\', \'3\', \'4\', \'5\', \'6\'),'),
+            
+            ('Cross-Sell - Display prices?', 'XSELL_DISPLAY_PRICE', 'false', 'Cross-Sell &mdash; Do you want to display the product prices too?<br>Default: false', $cgi, 35, now(), NULL, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
 
-    	/* Find configuation group ID of Cross Sell Advanced */
-    	$sql = "SELECT configuration_group_id FROM ".TABLE_CONFIGURATION_GROUP." WHERE configuration_group_title='".$xsell_menu_title."' LIMIT 1";
-    	$result = $db->Execute($sql);
-        $xsell_configuration_id = $result->fields['configuration_group_id'];
+            ('Cross-Sell - Use common sort order?', 'XSELL_USE_COMMON_SORT_ORDER', 'false', 'Cross-Sell &mdash; Use per product sort order (on Catalog-&gt;Cross-Sell Admin) or common sort order (on Catalog-&gt;Categories/Products Edit) ?<br>Default: false', $cgi, 38, now(), NULL, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
 
-    	/* Remove Cross Sell Advanced items from the configuration group table */
-    	$sql = "DELETE FROM ".TABLE_CONFIGURATION_GROUP." WHERE configuration_group_id ='".$xsell_configuration_id."'";
-        $db->Execute($sql);
+            ('Cross Sell Advanced Version', 'XSELL_VERSION', '0.0.0', 'Cross Sell Advanced Version (DO NOT MODIFY THIS VALUE!)', $cgi, 1, now(), NULL, NULL)"
+    );
 
-    	/* Remove Cross Sell Advanced items from the configuration table */
-    	$sql = "DELETE FROM ".TABLE_CONFIGURATION." WHERE configuration_group_id ='".$xsell_configuration_id."'";
-        $db->Execute($sql);
+    // -----
+    // Add the plugin's database table.
+    //
+    $db->Execute(
+        "CREATE TABLE IF NOT EXISTS " . TABLE_PRODUCTS_XSELL . "(
+            ID int(11) NOT NULL auto_increment,
+            products_id int(11) NOT NULL DEFAULT 1,
+            xsell_id int(11) NOT NULL DEFAULT 1,
+            sort_order int(11) NOT NULL DEFAULT 1,
+            PRIMARY KEY (ID),
+            KEY idx_products_id_xsell (products_id)
+         )"
+    );
 
-        /* Find max sort order in the configuation group table -- add 2 to this value to create the Cross Sell Advanced configuration group ID */
-        $sql = "SELECT (MAX(sort_order)+2) as sort FROM ".TABLE_CONFIGURATION_GROUP;
-        $result = $db->Execute($sql);
-        $sort = $result->fields['sort'];
+    // -----
+    // Register the plugin's configuration and tools in the admin menus.
+    //
+    zen_register_admin_page('configXsellCombo', 'BOX_CONFIGURATION_XSELL', 'FILENAME_CONFIGURATION', 'gID=' . $cgi, 'configuration', 'Y');
+    zen_register_admin_page('catalogXSellComboAdmin', 'BOX_CATALOG_XSELL', 'FILENAME_XSELL', '', 'catalog', 'Y');
+    zen_register_admin_page('catalogXSellComboAdvancedAdmin', 'BOX_CATALOG_XSELL_ADVANCED', 'FILENAME_XSELL_ADVANCED', '', 'catalog', 'Y');
+    
+    define('XSELL_VERSION', '0.0.0');
+}
 
-        /* Create Cross Sell Advanced configuration group */
-        $sql = "INSERT INTO ".TABLE_CONFIGURATION_GROUP." (configuration_group_id, configuration_group_title, configuration_group_description, sort_order, visible) VALUES (NULL, '".$xsell_menu_title."', '".$xsell_menu_text."', ".$sort.", '1')";
-        $db->Execute($sql);
-
-    /* Find configuation group ID of Cross Sell Advanced */
-    $sql = "SELECT configuration_group_id FROM ".TABLE_CONFIGURATION_GROUP." WHERE configuration_group_title='".$xsell_menu_title."' LIMIT 1";
-    $result = $db->Execute($sql);
-        $xsell_configuration_id = $result->fields['configuration_group_id'];
-
-//-- Add Values to Cross Sell Advanced Configuration Group (Admin > Configuration > Cross-Sell (X-Sell) Configuration)
-    $sql = "INSERT INTO ".TABLE_CONFIGURATION." (configuration_id, configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES (NULL, 'Display Cross-Sell Products Minimum', 'MIN_DISPLAY_XSELL', '1', 'This is the minimum number of configured Cross-Sell products required in order to cause the Cross Sell information to be displayed.<br />Default: 1', '".$xsell_configuration_id."', 20, NULL, now(), NULL, NULL)";
-    $db->Execute($sql);
-    $sql = "INSERT INTO ".TABLE_CONFIGURATION." (configuration_id, configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES (NULL, 'Display Cross-Sell Products Maximum', 'MAX_DISPLAY_XSELL', '6', 'This is the maximum number of configured Cross-Sell products to be displayed.<br />Default: 6', '".$xsell_configuration_id."', 25, NULL, now(), NULL, NULL)";
-    $db->Execute($sql);
-    $sql = "INSERT INTO ".TABLE_CONFIGURATION." (configuration_id, configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES (NULL, 'Cross-Sell Products Columns per Row', 'SHOW_PRODUCT_INFO_COLUMNS_XSELL_PRODUCTS', '3', 'Cross-Sell Products Columns to display per Row<br />0= off or set the sort order.<br />Default: 3', '".$xsell_configuration_id."', 30, NULL, now(), NULL, 'zen_cfg_select_option(array(''0'', ''1'', ''2'', ''3'', ''4'', ''5'', ''6''),')";
-    $db->Execute($sql);
-    $sql = "INSERT INTO ".TABLE_CONFIGURATION." (configuration_id, configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES (NULL, 'Cross-Sell - Display prices?', 'XSELL_DISPLAY_PRICE', 'false', 'Cross-Sell -- Do you want to display the product prices too?<br />Default: false', '".$xsell_configuration_id."', 35, NULL, now(), NULL, 'zen_cfg_select_option(array(''true'', ''false''),')";
-    $db->Execute($sql);
-    $sql = "INSERT INTO ".TABLE_CONFIGURATION." (configuration_id, configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES (NULL, 'Cross-Sell - Use common sort order?', 'XSELL_USE_COMMON_SORT_ORDER', 'false', 'Cross-Sell -- Use per product sort order (on Catalog-&gt;Cross-Sell Admin) or common sort order (on Catalog-&gt;Categories/Products Edit) ?<br />Default: false', '".$xsell_configuration_id."', 38, NULL, now(), NULL, 'zen_cfg_select_option(array(''true'', ''false''),')";
-    $db->Execute($sql);
-    $sql = "INSERT INTO ".TABLE_CONFIGURATION." (configuration_id, configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, last_modified, date_added, use_function, set_function) VALUES (NULL, 'Cross Sell Advanced Version', 'XSELL_VERSION', '1.5', 'Cross Sell Advanced Version (DO NOT MODIFY THIS VALUE!)', '".$xsell_configuration_id."', 40, NULL, now(), NULL, NULL)";
-    $db->Execute($sql);
-
-   if(file_exists(DIR_FS_ADMIN . DIR_WS_INCLUDES . 'auto_loaders/config.xsell.php'))
-    {
-        if(!unlink(DIR_FS_ADMIN . DIR_WS_INCLUDES . 'auto_loaders/config.xsell.php'))
-	{
-		$messageStack->add('The auto-loader file '.DIR_FS_ADMIN.'includes/auto_loaders/config.xsell.php has not been deleted. For this module to work you must delete the '.DIR_FS_ADMIN.'includes/auto_loaders/config.xsell.php file manually.  Before you post on the Zen Cart forum to ask, YES you are REALLY supposed to follow these instructions and delete the '.DIR_FS_ADMIN.'includes/auto_loaders/config.xsell.php file.','error');
-	};
+if (XSELL_VERSION !== XSELL_CURRENT_VERSION) {
+    $db->Execute(
+        "UPDATE " . TABLE_CONFIGURATION . "
+            SET configuration_value = '" . XSELL_CURRENT_VERSION . "'
+          WHERE configuration_key = 'XSELL_VERSION'
+          LIMIT 1"
+    );
+    if (XSELL_VERSION === '0.0.0') {
+        $messageStack->add_session(sprintf(MESSAGE_XSELL_INSTALLED, XSELL_CURRENT_VERSION), 'success');
+    } else {
+        $messageStack->add_session(sprintf(MESSAGE_XSELL_UPDATED, XSELL_CURRENT_VERSION), 'success');
     }
-
-       $messageStack->add('Cross Sell Advanced v1.3 install completed!','success');
-
-    // find next sort order in admin_pages table
-    $sql = "SELECT (MAX(sort_order)+2) as sort FROM ".TABLE_ADMIN_PAGES;
-    $result = $db->Execute($sql);
-    $admin_page_sort = $result->fields['sort'];
-
-    // now register the admin pages
-    // Admin Menu for Cross Sell Advanced Configuration Menu
-	zen_deregister_admin_pages('configXSELL');
-    zen_deregister_admin_pages('configXsellCombo');
-    zen_register_admin_page('configXsellCombo',
-        'BOX_CONFIGURATION_XSELL', 'FILENAME_CONFIGURATION',
-        'gID=' . $xsell_configuration_id, 'configuration', 'Y',
-        $admin_page_sort);
-		
-	//-- Catalog Menu for XSellCombo
-    zen_deregister_admin_pages('catalogXSellComboAdmin');
-    zen_register_admin_page('catalogXSellComboAdmin',
-        'BOX_CATALOG_XSELL', 'FILENAME_XSELL',
-        '', 'catalog', 'Y',
-        $admin_page_sort);
-		
-	//-- Catalog Menu for XSellComboAdvanced
-    zen_deregister_admin_pages('catalogXSellComboAdvancedAdmin');
-    zen_register_admin_page('catalogXSellComboAdvancedAdmin',
-        'BOX_CATALOG_XSELL_ADVANCED', 'FILENAME_XSELL_ADVANCED',
-        '', 'catalog', 'Y',
-        $admin_page_sort);
+}

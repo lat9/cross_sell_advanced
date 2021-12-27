@@ -11,6 +11,15 @@
  * Adapted to Zen Cart by Merlin - Spring 2005
  * Reworked for Zen Cart v1.3.0  03-30-2006
  * 
- * This file is obsolete in Cross Sell Advance v1.3. You can remove this file from your store! 
- * 
  */
+
+//XSell Admin Menu Boxes
+define('BOX_CONFIGURATION_XSELL', 'Cross-Sell (X-Sell) Configuration');
+define('BOX_CATALOG_XSELL', 'Cross-Sell (X-Sell) Admin');
+define('BOX_CATALOG_XSELL_ADVANCED', 'Cross Sell (X-Sell) Advanced Admin');
+
+// -----
+// Install/upgrade messages, used by init_xsell_config.php.
+//
+define('MESSAGE_XSELL_INSTALLED', 'Advanced Cross Sell (v%s) was successfully installed.');
+define('MESSAGE_XSELL_UPDATED', 'Advanced Cross Sell was updated to v%s');
