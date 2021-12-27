@@ -33,7 +33,7 @@ $xsell_columns = (int)SHOW_PRODUCT_INFO_COLUMNS_XSELL_PRODUCTS;
 // collect information on available cross-sell products for the current product-id
 if ($xsell_columns > 0 && $xsell_max_display > 0 && isset($_GET['products_id'])) {
     $xsell_query_sql = 
-        "SELECT DISTINCT p.products_id, p.products_image, pd.products_name
+        "SELECT p.products_id, p.products_image, pd.products_name
            FROM " . TABLE_PRODUCTS_XSELL . " xp
                 INNER JOIN " . TABLE_PRODUCTS . " p
                     ON p.products_id = xp.xsell_id

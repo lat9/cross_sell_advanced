@@ -1,0 +1,129 @@
+<!doctype html>
+<html dir="ltr" lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Cross Sell Advanced II (Zen-Cart&reg; v1.5.7)</title>
+<style>
+<!--
+a, a:active, a:visited {
+  color: #006666;
+  text-decoration: none
+}
+a:hover {
+    color:#00CC99;
+    text-decoration: underline;
+}
+BODY, P, H1, H2, H3, H4, H5, H6, LI, TD, DD, DT, table, img {
+  font-family: Verdana, AvantGarde, Tahoma, Arial, sans-serif;
+  font-size: 12px;
+  color: black;
+  padding: 0px;
+  margin: 20px;
+}
+H1, H2, H3, H4 {
+  font-weight: bold;
+}
+h1 {
+  font-size: 20px;
+}
+h2 {
+  font-size: 16px;
+  border-top: 1px dashed #000066;
+  padding-top: 5px;
+  color: #000066;
+}
+img {
+    max-width: 95vw;
+    height: auto;
+}
+table { 
+  border-collapse: collapse; 
+}
+th, td {
+  border: 1px solid #000066;
+  padding: 5px;
+  text-align: left;
+}
+ol li, ul li {
+  margin: 0 0 5px;
+}
+ol li ul li, ul li ul li {
+  margin: 0 auto 5px;
+}
+tr td:first-child {
+  font-weight: bold;
+  color: #000066;
+}
+.smaller {
+  font-size: 10px;
+}
+.o {
+  background-color: #f4f4f4;
+}
+-->
+</style>
+</head>
+<body>
+<h1>Cross Sell Advanced II for Zen Cart&reg; v1.5.7+</h1>
+<h3>Version 2.0.0</h3>
+<p>Copyright (c) 2021, <a href="https://vinosdefrutastropicales.com" target="_blank" rel="noopener noreferrer">Vinos de Frutas Tropicales</a> (lat9)</p>
+<p>Based on <em>Cross Sell Advanced v1.5</em> (https://www.zen-cart.com/downloads.php?do=file&id=400) which, itself, was based on the original Cross Sell add-on (https://www.zen-cart.com/downloads.php?do=file&id=2, Cross Sell by Merlin/DrByte).</p>
+<p>Current support thread at Zen Cart Forums: <a href="http://www.zen-cart.com/showthread.php?211884-Cross-Sell-Advanced-Support-Thread" target="_blank">http://www.zen-cart.com/showthread.php?211884-Cross-Sell-Advanced-Support-Thread</a>.  This software is provided for your use under the GNU General Public License.</p>
+<p>Current Zen Cart download: <a href="https://www.zen-cart.com/downloads.php?do=file&id=400" target="_blank" rel="noopener noreferrer">https://www.zen-cart.com/downloads.php?do=file&id=734</a>.</p>
+<p><b>Notes:</b></p>
+<ol>
+    <li>This plugin requires <em>Zen Cart v1.5.7 or later</em> for its proper operation!</li>
+    <li>The plugin's installation requires <em>hand-editing</em> of one or more product-information display templates.</li>
+</ol>
+
+<h2>What it does</h2>
+<p>This Zen Cart plugin enables a site to &quot;cross-sell&quot; products.  An admin tool is provided that is used to 'connect' the various cross-sells for the site and a simple storefront 'centerbox' is provided for the cross-sells' display.</p>
+
+<h2>Installation</h2>
+<p>There are no core-file overwrites in this plugin, but you should <strong>always</strong> backup your cart's database and files prior to making any changes.</p>
+<p>Copy the following files to your cart's installation, after renaming the &quot;YOUR_ADMIN&quot; directory to match your custom admin's name:</p>
+<ol>
+    <li>/includes/extra_datafiles/xsell_definitions.php</li>
+    <li>/includes/languages/english/extra_definitions/xsell_products_definitions.php</li>
+    <li>/includes/modules/xsell_products.php</li>
+    <li>/includes/templates/template_default/templates/tpl_modules_xsell_products.php</li>
+    <li>/YOUR_ADMIN/xsell.php</li>
+    <li>/YOUR_ADMIN/includes/auto_loaders/config.xsell.php</li>
+    <li>/YOUR_ADMIN/includes/extra_datafiles/xsell_advanced_definitions.php <span class="smaller">(No longer used, can be safely removed)</span></li>
+    <li>/YOUR_ADMIN/includes/functions/extra_functions/cross_sell_plus_advanced_page_registration.php <span class="smaller">(No longer used, can be safely removed)</span></li>
+    <li>/YOUR_ADMIN/includes/init_includes/init_xsell_config.php</li>
+    <li>/YOUR_ADMIN/includes/javascript/xsell.php</li>
+    <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/advanced_xsell_defs.php <span class="smaller">(No longer used, can be safely removed)</span></li>
+    <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/x-sell_defs.php</li>
+    <li>/YOUR_ADMIN/includes/modules/xsell/category_product_selection.php</li>
+</ol>
+<p>Now that the base files have been copied, go to your site's admin and refresh the page to cause the plugin's installation script to run.  Next step is to add the cross-sell information to your template's <code>tpl_*.info_display.php</code> files.  See <a href="https://github.com/lat9/cross_sell_advanced/pages/updating_your_template.md" target="_blank" rel="noopener noreferrer">this</a> online documentation for the process.</p>
+
+<h2>Uninstall</h2>
+<p>First, delete the files that were copied to your zen-cart installation's admin directories, then use your admin's <em>Tools-&gt;Run SQL Patches</em> to run the file <b>xsell_uninstall.sql</b>.</p>
+
+<h2>Version History:</h2>
+<ul>
+    <li>v2.0.0, 2021-12-27 (lat9):<ul>
+        <li>CHANGE: Totally rewritten to make use of the zc157+ admin environment.</li>
+        <li>BUGFIX: Modify SQL queries to support strict MySQL installations.</li>
+        <li>BUGFIX: Correcting various PHP notices, deprecations and warnings.</li>
+        <li>CHANGE: The minimum Zen Cart version now supported is v1.5.7.</li>
+        <li>CHANGE: Removing admin's <code>xsell_advanced.php</code>; all processing is now in <code>xsell.php</code>.</li>
+        <li>CHANGE: Additions to the storefront templates now require hand-editing!.</li>
+    </ul></li>
+</ul>
+<h3>Author History</h3>
+<p>This plugin's been around for <em>a while</em> under various names.  Some of the previous changes were authored by:</p>
+<ul>
+    <li>Original contributed by Voltage (https://www.zen-cart.com/member.php?u=10635)</li>
+    <li>v1.1, 2012, Pro-Webs, submitted as <em>Cross Sell Plus Advanced Sell Combo</em> - https://www.zen-cart.com/downloads.php?do=file&id=1364</li>
+    <li>v1.2, December 2012. Updated for Zen Cart v1.5.2, RodG</li>
+    <li>v1.3. C Jones (http://overthehillweb.com), various cleanups.</li>
+    <li>v1.4. Updated for Zen Cart 1.5.5, jeking (https://www.wheatonwebsiteservices.com)</li>
+    <li>v1.5. Including <em>Common Sort Order</em> (https://www.zen-cart.com/downloads.php?do=file&id=2102), swguy (https://www.thatsoftwareguy.com)</li>
+</ul>
+</body>
+</html>

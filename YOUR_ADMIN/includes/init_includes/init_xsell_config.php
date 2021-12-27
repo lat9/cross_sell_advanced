@@ -64,6 +64,10 @@ if (!$result->EOF) {
           LIMIT 1"
     );
     $db->Execute(
+        "DELETE FROM " . TABLE_CONFIGURATION . "
+          WHERE configuration_key IN ('MIN_DISPLAY_XSELL', 'MAX_DISPLAY_XSELL', 'SHOW_PRODUCT_INFO_COLUMNS_XSELL_PRODUCTS', 'XSELL_DISPLAY_PRICE', 'XSELL_USE_COMMON_SORT_ORDER', 'XSELL_VERSION')"
+    );
+    $db->Execute(
         "INSERT INTO " . TABLE_CONFIGURATION . "
             (configuration_title, configuration_key, configuration_value, configuration_description, configuration_group_id, sort_order, date_added, use_function, set_function)
          VALUES
@@ -97,10 +101,11 @@ if (!$result->EOF) {
     // -----
     // Register the plugin's configuration and tools in the admin menus.
     //
+    zen_deregister_admin_pages(['configXsellCombo', 'catalogXSellComboAdmin', 'catalogXSellComboAdvancedAdmin']);
     zen_register_admin_page('configXsellCombo', 'BOX_CONFIGURATION_XSELL', 'FILENAME_CONFIGURATION', 'gID=' . $cgi, 'configuration', 'Y');
     zen_register_admin_page('catalogXSellComboAdmin', 'BOX_CATALOG_XSELL', 'FILENAME_XSELL', '', 'catalog', 'Y');
     zen_register_admin_page('catalogXSellComboAdvancedAdmin', 'BOX_CATALOG_XSELL_ADVANCED', 'FILENAME_XSELL_ADVANCED', '', 'catalog', 'Y');
-    
+
     define('XSELL_VERSION', '0.0.0');
 }
 
