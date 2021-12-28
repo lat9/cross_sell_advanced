@@ -24,3 +24,4 @@ define('BOX_CATALOG_XSELL_ADVANCED', 'Cross Sell (X-Sell) Advanced Admin');
 define('MESSAGE_XSELL_INSTALLED', 'Cross Sell Advanced II (v%s) was successfully installed.');
 define('MESSAGE_XSELL_UPDATED', 'Cross Sell Advanced II was updated to v%s');
 define('MESSAGE_XSELL_DUPLICATES_REMOVED', '%u duplicate cross-sell entries were removed.');
+define('MESSAGE_XSELL_REMOVED', '%u cross-sell entries were removed; the associated products no longer exist.');

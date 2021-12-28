@@ -11,7 +11,7 @@ if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
 
-define('XSELL_CURRENT_VERSION', '2.0.0-beta2');
+define('XSELL_CURRENT_VERSION', '2.0.0-beta3');
 
 // -----
 // Only update configuration when an admin is logged in.
@@ -116,13 +116,15 @@ if (XSELL_VERSION !== XSELL_CURRENT_VERSION) {
           WHERE configuration_key = 'XSELL_VERSION'
           LIMIT 1"
     );
-    
-    // -----
-    // Previous versions of the various "Cross Sell" plugins might have left duplicates in the products_xsell
-    // table; let's remove them.
-    //
+
     switch (true) {
+        // -----
+        // v2.0.0: On installation, provide some fixups from previous versions.
+        //
         case version_compare(XSELL_VERSION, '2.0.0', '<'):
+            // -----
+            // Remove duplicate entries in the 'products_xsell' table possibly allowed by previous "Cross Sell" plugins.
+            //
             $xsells = $db->Execute(
                 "SELECT *
                    FROM " . TABLE_PRODUCTS_XSELL . "
@@ -136,7 +138,7 @@ if (XSELL_VERSION !== XSELL_CURRENT_VERSION) {
                 } else {
                     $xsells_removed++;
                     $db->Execute(
-                        "DELETE FROM " . TABLE_XSELL . "
+                        "DELETE FROM " . TABLE_PRODUCTS_XSELL . "
                           WHERE `ID` = " . $next_xsell['ID'] . "
                           LIMIT 1"
                     );
@@ -144,6 +146,19 @@ if (XSELL_VERSION !== XSELL_CURRENT_VERSION) {
             }
             if ($xsells_removed !== 0) {
                 $messageStack->add_session(sprintf(MESSAGE_XSELL_DUPLICATES_REMOVED, $xsells_removed), 'warning');
+            }
+
+            // -----
+            // Now, remove any cross-sell products (and their cross-sells) that no longer exist.
+            //
+            $db->Execute(
+                "DELETE FROM " . TABLE_PRODUCTS_XSELL . "
+                  WHERE products_id NOT IN (SELECT p.products_id FROM " . TABLE_PRODUCTS . " p)
+                     OR xsell_id NOT IN (SELECT p.products_id FROM " . TABLE_PRODUCTS . " p)"
+            );
+            $xsells_removed = $db->affectedRows();
+            if ($xsells_removed !== 0) {
+                $messageStack->add_session(sprintf(MESSAGE_XSELL_REMOVED, $xsells_removed), 'warning');
             }
         default:                                            //-Fall-through from the above processing.
             break;

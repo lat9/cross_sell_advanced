@@ -19,7 +19,7 @@ define('ERROR_INVALID_MAIN_PRODUCT', 'Invalid main product (%u); no cross-sell c
 define('ERROR_MISSING_MAIN_PRODUCT', 'Missing main product to create/update cross-sells; returning to main display.');
 define('ERROR_CROSS_SELL_EXISTS', 'The requested product is already a cross-sell for the selected main product.');
 
-define('HEADING_TITLE', 'Cross-Sell (X-Sell)');
+define('HEADING_TITLE', 'Cross-Sell Advanced II');
 define('SUBHEADING_MAIN_ADD', 'Create New Cross-Sell Product');
 define('SUBHEADING_MAIN_TITLE', 'Viewing Current Products with Cross-sells');
 
