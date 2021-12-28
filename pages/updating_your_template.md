@@ -26,7 +26,7 @@ For each product type:
    <!--eof Product URL -->
    <?php
    //-bof-advanced_cross_sell_ii  *** 1 of 1 ***
-   include $template->get_template_dir('tpl_modules_xsell_products.php', DIR_WS_TEMPLATE, $current_page_base, 'templates') . '/tpl_modules_xsell_products.php';
+   include $template->get_template_dir('tpl_modules_xsell2_products.php', DIR_WS_TEMPLATE, $current_page_base, 'templates') . '/tpl_modules_xsell2_products.php';
    //-eof-advanced_cross_sell_ii  *** 1 of 1 ***
    ?>
    <!--bof also purchased products module-->
