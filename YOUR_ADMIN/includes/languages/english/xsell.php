@@ -36,6 +36,8 @@ define('TABLE_HEADING_PRODUCT_SORT', 'Sort Order');
 define('TABLE_HEADING_ACTION', 'Action');
 define('TABLE_HEADING_REMOVE', 'Remove?');
 
+define('TEXT_BUTTON_NEW', 'New');
+
 define('TEXT_MAIN_INSTRUCTIONS', 'Use the forms below to either create a new cross-sell product or to manage existing cross-sells.');
 define('TEXT_EDIT_INSTRUCTIONS', 'Use the forms below to either add a new cross-sell to the selected product or to manage the selected product\'s existing cross-sells.');
 

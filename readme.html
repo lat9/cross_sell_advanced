@@ -91,6 +91,7 @@ tr td:first-child {
     <li>/includes/templates/template_default/templates/tpl_modules_xsell2_products.php</li>
     <li>/YOUR_ADMIN/xsell.php</li>
     <li>/YOUR_ADMIN/includes/auto_loaders/config.xsell.php</li>
+    <li>/YOUR_ADMIN/includes/classes/observers/XsellAdminObserver.php</li>
     <li>/YOUR_ADMIN/includes/extra_datafiles/xsell_advanced_definitions.php <span class="smaller">(No longer used, can be safely removed)</span></li>
     <li>/YOUR_ADMIN/includes/functions/extra_functions/cross_sell_plus_advanced_page_registration.php <span class="smaller">(No longer used, can be safely removed)</span></li>
     <li>/YOUR_ADMIN/includes/init_includes/init_xsell_config.php</li>
@@ -113,6 +114,8 @@ tr td:first-child {
         <li>CHANGE: The minimum Zen Cart version now supported is v1.5.7.</li>
         <li>CHANGE: Removing admin's <code>xsell_advanced.php</code>; all processing is now in <code>xsell.php</code>.</li>
         <li>CHANGE: Additions to the storefront templates now require hand-editing!.</li>
+        <li>BUGFIX: An observer now removes <code>products_xsell</code> entries when associated products are removed.</li>
+        <li>CHANGE: No more auto-deleting admin installation handler.</li>
     </ul></li>
 </ul>
 <h3>Author History</h3>
