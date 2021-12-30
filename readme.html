@@ -91,11 +91,13 @@ tr td:first-child {
     <li>/includes/templates/template_default/templates/tpl_modules_xsell2_products.php</li>
     <li>/YOUR_ADMIN/xsell.php</li>
     <li>/YOUR_ADMIN/includes/auto_loaders/config.xsell.php</li>
+    <li>/YOUR_ADMIN/includes/classes/dbio/DbIoProductsXsellHandler.php</li>
     <li>/YOUR_ADMIN/includes/classes/observers/XsellAdminObserver.php</li>
     <li>/YOUR_ADMIN/includes/extra_datafiles/xsell_advanced_definitions.php <span class="smaller">(No longer used, can be safely removed)</span></li>
     <li>/YOUR_ADMIN/includes/functions/extra_functions/cross_sell_plus_advanced_page_registration.php <span class="smaller">(No longer used, can be safely removed)</span></li>
     <li>/YOUR_ADMIN/includes/init_includes/init_xsell_config.php</li>
     <li>/YOUR_ADMIN/includes/javascript/xsell.php</li>
+    <li>/YOUR_ADMIN/includes/languages/english/dbio/DbIoProductsXsellHandler.php</li>
     <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/advanced_xsell_defs.php <span class="smaller">(No longer used, can be safely removed)</span></li>
     <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/x-sell_defs.php</li>
     <li>/YOUR_ADMIN/includes/modules/xsell/category_product_selection.php</li>
@@ -107,7 +109,7 @@ tr td:first-child {
 
 <h2>Version History:</h2>
 <ul>
-    <li>v2.0.0, 2021-12-27 (lat9):<ul>
+    <li>v2.0.0, 2021-12-30 (lat9):<ul>
         <li>CHANGE: Totally rewritten to make use of the zc157+ admin environment.</li>
         <li>BUGFIX: Modify SQL queries to support strict MySQL installations.</li>
         <li>BUGFIX: Correcting various PHP notices, deprecations and warnings.</li>
@@ -116,6 +118,7 @@ tr td:first-child {
         <li>CHANGE: Additions to the storefront templates now require hand-editing!.</li>
         <li>BUGFIX: An observer now removes <code>products_xsell</code> entries when associated products are removed.</li>
         <li>CHANGE: No more auto-deleting admin installation handler.</li>
+        <li>CHANGE: Adding a <em>DbIo</em> handler for exporting and importing the <code>products_xsell</code> table's records.</li>
     </ul></li>
 </ul>
 <h3>Author History</h3>
