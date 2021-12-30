@@ -1,6 +1,6 @@
 <?php
 // -----
-// Part of the "Cross Sell Advanced" plugin for Zen Carts 1.5.7 and later.
+// Part of the "Cross Sell Advanced II" plugin for Zen Carts 1.5.7 and later.
 //
 // Common 'rendering' of a product selection, uses variables from the main /admin/xsell.php:
 //
@@ -15,7 +15,7 @@ if (!defined('IS_ADMIN_FLAG')) {
 }
 ?>
 <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-6">
 <?php 
 echo zen_draw_form('new_category', FILENAME_XSELL, $next_action, 'get') . PHP_EOL .
      zen_draw_pull_down_menu('xsell_category_id', zen_get_category_tree('', '', '0', '', '', true), $xsell_category_id, 'onchange="this.form.submit();" class="form-control"') . PHP_EOL .
@@ -35,7 +35,7 @@ echo '</form>';
 //
 if ($xsell_category_id !== 0 && $xsell_pid === 0) {
 ?>
-    <div class="col-sm-4">
+    <div class="col-sm-6">
 <?php
     echo zen_draw_form('set_xsell_pid', FILENAME_XSELL, 'action=set_xsell_pid', 'post', 'class="form-horizontal"') .
          zen_draw_hidden_field('xsell_category_id', $xsell_category_id) .
@@ -59,7 +59,7 @@ if ($xsell_category_id !== 0 && $xsell_pid === 0) {
     //
     $current_category_id = $xsell_category_id;
     echo zen_draw_products_pull_down('xsell_pid', 'class="form-control" id="xsell_pid"', $excluded_products, true, $xsell_pid, true, true, true); ?>
-    <button class="btn btn-info" type="submit"><?php echo TEXT_BUTTON_NEW; ?></button>
+    &nbsp;&nbsp;<button class="btn btn-info" type="submit"><?php echo TEXT_BUTTON_NEW; ?></button>
     <?php echo '</form>'; ?>
     </div>
 <?php
