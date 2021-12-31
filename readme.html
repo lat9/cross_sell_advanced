@@ -7,14 +7,6 @@
 <title>Cross Sell Advanced II (Zen-Cart&reg; v1.5.7)</title>
 <style>
 <!--
-a, a:active, a:visited {
-  color: #006666;
-  text-decoration: none
-}
-a:hover {
-    color:#00CC99;
-    text-decoration: underline;
-}
 BODY, P, H1, H2, H3, H4, H5, H6, LI, TD, DD, DT, table, img {
   font-family: Verdana, AvantGarde, Tahoma, Arial, sans-serif;
   font-size: 12px;
@@ -70,7 +62,7 @@ tr td:first-child {
 <h3>Version 2.0.0</h3>
 <p>Copyright (c) 2021, <a href="https://vinosdefrutastropicales.com" target="_blank" rel="noopener noreferrer">Vinos de Frutas Tropicales</a> (lat9)</p>
 <p>Based on <em>Cross Sell Advanced v1.5</em> (https://www.zen-cart.com/downloads.php?do=file&id=400) which, itself, was based on the original Cross Sell add-on (https://www.zen-cart.com/downloads.php?do=file&id=2, Cross Sell by Merlin/DrByte).</p>
-<p>Current support thread at Zen Cart Forums: <a href="http://www.zen-cart.com/showthread.php?211884-Cross-Sell-Advanced-Support-Thread" target="_blank">http://www.zen-cart.com/showthread.php?211884-Cross-Sell-Advanced-Support-Thread</a>.  This software is provided for your use under the GNU General Public License.</p>
+<p>Current support thread at Zen Cart Forums: <a href="https://www.zen-cart.com/showthread.php?211884-Cross-Sell-Advanced-Support-Thread" target="_blank">https://www.zen-cart.com/showthread.php?211884-Cross-Sell-Advanced-Support-Thread</a>.  This software is provided for your use under the GNU General Public License.</p>
 <p>Current Zen Cart download: <a href="https://www.zen-cart.com/downloads.php?do=file&id=400" target="_blank" rel="noopener noreferrer">https://www.zen-cart.com/downloads.php?do=file&id=734</a>.</p>
 <p><b>Notes:</b></p>
 <ol>
@@ -79,7 +71,7 @@ tr td:first-child {
 </ol>
 
 <h2>What it does</h2>
-<p>This Zen Cart plugin enables a site to &quot;cross-sell&quot; products.  An admin tool is provided that is used to 'connect' the various cross-sells for the site and a simple storefront 'centerbox' is provided for the cross-sells' display.</p>
+<p>This Zen Cart plugin enables a site to &quot;cross-sell&quot; products.  An admin tool is provided that is used to 'connect' the various cross-sells for the site and a simple storefront 'centerbox' is provided for the cross-sells' display.  Additional documentation can be found on the plugin's GitHub <a href="https://github.com/lat9/cross_sell_advanced/blob/main/README.md" rel="noopener noreferrer" target="_blank">repository</a>.</p>
 
 <h2>Installation</h2>
 <p>There are no core-file overwrites in this plugin, but you should <strong>always</strong> backup your cart's database and files prior to making any changes.</p>
@@ -95,6 +87,7 @@ tr td:first-child {
     <li>/YOUR_ADMIN/includes/classes/observers/XsellAdminObserver.php</li>
     <li>/YOUR_ADMIN/includes/extra_datafiles/xsell_advanced_definitions.php <span class="smaller">(No longer used, can be safely removed)</span></li>
     <li>/YOUR_ADMIN/includes/functions/extra_functions/cross_sell_plus_advanced_page_registration.php <span class="smaller">(No longer used, can be safely removed)</span></li>
+    <li>/YOUR_ADMIN/includes/functions/extra_functions/zen_cfg_read_only.php</li>
     <li>/YOUR_ADMIN/includes/init_includes/init_xsell_config.php</li>
     <li>/YOUR_ADMIN/includes/javascript/xsell.php</li>
     <li>/YOUR_ADMIN/includes/languages/english/dbio/DbIoProductsXsellHandler.php</li>
@@ -119,6 +112,7 @@ tr td:first-child {
         <li>BUGFIX: An observer now removes <code>products_xsell</code> entries when associated products are removed.</li>
         <li>CHANGE: No more auto-deleting admin installation handler.</li>
         <li>CHANGE: Adding a <em>DbIo</em> handler for exporting and importing the <code>products_xsell</code> table's records.</li>
+        <li>CHANGE: SQL uninstall script now provided.</li>
     </ul></li>
 </ul>
 <h3>Author History</h3>
