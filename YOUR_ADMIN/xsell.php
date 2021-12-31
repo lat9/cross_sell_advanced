@@ -16,6 +16,13 @@
 require 'includes/application_top.php';
 
 // -----
+// Bring in the currencies' class, used by the zen_draw_products_pulldown function within
+// /admin/includes/modules/xsell/category_product_selection.php.
+//
+require DIR_WS_CLASSES . 'currencies.php';
+$currencies = new currencies();
+
+// -----
 // Initialize the languages-id in use and determine the action/next-action to be performed.
 //
 $languages_id = $_SESSION['languages_id'];
