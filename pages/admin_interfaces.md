@@ -6,7 +6,7 @@ The plugin includes an auto-loading installation script that creates (or updates
 
 A new set of configuration settings (***Cross Sell Advanced II***) enables an admin to control the storefront display of any product cross-sells:
 
-![Configuration Settings](../images/configuration.png)
+![Configuration Settings](./images/configuration.png)
 
 | Configuration Title                 | Default | Description                                                  |
 | ----------------------------------- | ------- | ------------------------------------------------------------ |
