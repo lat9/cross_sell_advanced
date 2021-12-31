@@ -41,12 +41,12 @@ if ($xsell_columns >= 0 && $xsell_max_display > 0 && isset($_GET['products_id'])
           WHERE xp.products_id = " . (int)$_GET['products_id'] . "
             AND p.products_status = 1"; 
     if ($common_sort_order === true) { 
-        $xsell_query_sql .= " ORDER BY p.products_xsell_sort_order ASC LIMIT " . $xsell_max_display;
+        $xsell_query_sql .= " ORDER BY p.products_xsell_sort_order ASC";
     } else { 
-        $xsell_query_sql .= " ORDER BY xp.sort_order ASC LIMIT " . $xsell_max_display;
+        $xsell_query_sql .= " ORDER BY xp.sort_order ASC";
     }
 
-    $xsell_query = $db->Execute($xsell_query_sql); 
+    $xsell_query = $db->ExecuteRandomMulti($xsell_query_sql, $xsell_max_display); 
     $num_products_xsell = $xsell_query->RecordCount();
 
     if ($num_products_xsell === 0) {
@@ -62,7 +62,8 @@ if ($xsell_columns >= 0 && $xsell_max_display > 0 && isset($_GET['products_id'])
     } else {
         $col_width = floor(100 / $xsell_columns);
     }
-    foreach ($xsell_query as $next_xsell) {
+    while (!$xsell_query->EOF) {
+        $next_xsell = $xsell_query->fields;
         if ($common_sort_order === true) { 
             $xsell_image = zen_image_OLD(DIR_WS_IMAGES . $next_xsell['products_image'], $next_xsell['products_name'], SMALL_IMAGE_WIDTH, SMALL_IMAGE_HEIGHT);
         } else { 
@@ -77,7 +78,7 @@ if ($xsell_columns >= 0 && $xsell_max_display > 0 && isset($_GET['products_id'])
         }
 
         $list_box_contents[$row][$col] = [
-            'params' => 'class="centerBoxContentsCrossSell centeredContent back" style="width:' . $col_width . '%;"',
+            'params' => 'class="centerBoxContentsAlsoPurch xsell-centerbox centeredContent back" style="width:' . $col_width . '%;"',
             'text' => $xsell_query_text
         ]; 
 
@@ -86,6 +87,7 @@ if ($xsell_columns >= 0 && $xsell_max_display > 0 && isset($_GET['products_id'])
             $col = 0;
             $row++;
         }
+        $xsell_query->MoveNextRandom();
     }
     // store data into array for display later where desired:
     $xsell_data = $list_box_contents;
