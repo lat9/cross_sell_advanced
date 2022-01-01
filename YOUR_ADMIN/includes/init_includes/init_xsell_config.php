@@ -5,13 +5,13 @@
 // @copyright 2013 C Jones
 // $copyright 2021, lat9 (https://vinosdefrutastropicales.com).
 // @license http://www.zen-cart.com/license/2_0.txt GNU Public License V2.0
-// @version $Id: init_xsell_config.php v2.0.0, 2021-12-31, lat9 $
+// @version $Id: init_xsell_config.php v2.0.0, 2022-01-01, lat9 $
 //
 if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
 
-define('XSELL_CURRENT_VERSION', '2.0.0-beta3');
+define('XSELL_CURRENT_VERSION', '2.0.0');
 
 // -----
 // Only update configuration when an admin is logged in.
