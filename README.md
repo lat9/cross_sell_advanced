@@ -10,7 +10,7 @@ This version of the plugin:
 
 ***Zen Cart Support Thread:*** https://www.zen-cart.com/showthread.php?211884-Cross-Sell-Advanced-Support-Thread
 
-***Zen Cart Download Link:*** TBD
+***Zen Cart Download Link:*** https://www.zen-cart.com/downloads.php?do=file&id=2334
 
 For additional documentation of the plugin's admin interfaces, see [Cross Sell Admin Changes](./pages/admin_interfaces.md).
 
