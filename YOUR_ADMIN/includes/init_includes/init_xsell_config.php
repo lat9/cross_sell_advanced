@@ -11,7 +11,7 @@ if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
 
-define('XSELL_CURRENT_VERSION', '2.0.0');
+define('XSELL_CURRENT_VERSION', '2.0.1');
 
 // -----
 // Only update configuration when an admin is logged in.
@@ -77,7 +77,7 @@ if (!$result->EOF) {
             
             ('Cross-Sell - Display prices?', 'XSELL_DISPLAY_PRICE', 'false', 'Cross-Sell &mdash; Do you want to display the product prices too?<br>Default: false', $cgi, 35, now(), NULL, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
 
-            ('Cross Sell Advanced II Version', 'XSELL_VERSION', '0.0.0', 'Current <em>Cross Sell Advanced II</em> Version', $cgi, 1, now(), NULL, , 'zen_cfg_read_only(')"
+            ('Cross Sell Advanced II Version', 'XSELL_VERSION', '0.0.0', 'Current <em>Cross Sell Advanced II</em> Version', $cgi, 1, now(), NULL, 'zen_cfg_read_only(')"
     );
 
     // -----

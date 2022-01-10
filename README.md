@@ -1,4 +1,4 @@
-# Cross Sell Advanced II, v2.0.0
+# Cross Sell Advanced II, v2.0.1
 This repository contains the ***Cross Sell Advanced II*** plugin, for Zen Cart v1.5.7 and later,  which was derived from v1.5 of the previous version (https://www.zen-cart.com/downloads.php?do=file&id=400).  The plugin enables a site to display a list of additional, cross-sell products when viewing the details of an individual product.
 
 This version of the plugin:
