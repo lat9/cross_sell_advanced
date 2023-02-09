@@ -4,10 +4,9 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cross Sell Advanced II (Zen-Cart&reg; v1.5.7)</title>
+<title>Cross Sell Advanced II (Zen-Cart&reg; v1.5.7 and v1.5.8)</title>
 <style>
-<!--
-BODY, P, H1, H2, H3, H4, H5, H6, LI, TD, DD, DT, table, img {
+body, p, h1, h2, h3, h4, h5, h6, li, td, dd, dt, table, img {
   font-family: Verdana, AvantGarde, Tahoma, Arial, sans-serif;
   font-size: 12px;
   color: black;
@@ -58,16 +57,20 @@ tr td:first-child {
 </style>
 </head>
 <body>
-<h1>Cross Sell Advanced II for Zen Cart&reg; v1.5.7+</h1>
-<h3>Version 2.0.1</h3>
-<p>Copyright (c) 2022, <a href="https://vinosdefrutastropicales.com" target="_blank" rel="noopener noreferrer">Vinos de Frutas Tropicales</a> (lat9)</p>
+<h1>Cross Sell Advanced II for Zen Cart&reg; v1.5.7 and v1.5.8</h1>
+<h3>Version 2.0.2</h3>
+<p>Copyright (c) 2022-2023, <a href="https://vinosdefrutastropicales.com" target="_blank" rel="noopener noreferrer">Vinos de Frutas Tropicales</a> (lat9)</p>
 <p>Based on <em>Cross Sell Advanced v1.5</em> (https://www.zen-cart.com/downloads.php?do=file&id=400) which, itself, was based on the original Cross Sell add-on (https://www.zen-cart.com/downloads.php?do=file&id=2, Cross Sell by Merlin/DrByte).</p>
 <p>Current support thread at Zen Cart Forums: <a href="https://www.zen-cart.com/showthread.php?211884-Cross-Sell-Advanced-Support-Thread" target="_blank">https://www.zen-cart.com/showthread.php?211884-Cross-Sell-Advanced-Support-Thread</a>.  This software is provided for your use under the GNU General Public License.</p>
 <p>Current Zen Cart download: <a href="https://www.zen-cart.com/downloads.php?do=file&id=2334" target="_blank">https://www.zen-cart.com/downloads.php?do=file&id=2334</a>.</p>
 <p><b>Notes:</b></p>
 <ol>
-    <li>This plugin requires <em>Zen Cart v1.5.7 or later</em> for its proper operation!</li>
+    <li>This plugin requires <em>Zen Cart v1.5.7 or later (including v1.5.8)</em> for its proper operation!</li>
     <li>The plugin's installation requires <em>hand-editing</em> of one or more product-information display templates.</li>
+    <li>For additional information, refer to the plugin's on-line documentation:<ul>
+        <li><a href="https://github.com/lat9/cross_sell_advanced/blob/main/pages/admin_interfaces.md" target="_blank">Admin Interfaces</a></li>
+        <li><a href="https://github.com/lat9/cross_sell_advanced/blob/main/pages/storefront_interfaces.md" target="_blank">Storefront Changes</a></li>
+    </ul></li>
 </ol>
 
 <h2>What it does</h2>
@@ -104,6 +107,13 @@ tr td:first-child {
 
 <h2>Version History:</h2>
 <ul>
+    <li>v2.0.2, 2023-02-09 (lat9, swguy):<ul>
+        <li>INTROP: Enable zc158 integration; function name changed from zc157.</li>
+        <li>The following files were changed:<ol>
+            <li>YOUR_ADMIN/includes/modules/xsell/category_product_selection.php</li>
+            <li>/YOUR_ADMIN/includes/init_includes/init_xsell_config.php</li>
+        </ol></li>
+    </ul></li>
     <li>v2.0.1, 2022-01-10 (lat9):<ul>
         <li>BUGFIX: Correct 'fresh' installation MySQL error.</li>
         <li>BUGFIX: Correct SQL uninstall script.</li>

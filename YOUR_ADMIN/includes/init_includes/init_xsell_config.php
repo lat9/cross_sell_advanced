@@ -11,7 +11,7 @@ if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
 
-define('XSELL_CURRENT_VERSION', '2.0.1');
+define('XSELL_CURRENT_VERSION', '2.0.2');
 
 // -----
 // Only update configuration when an admin is logged in.
