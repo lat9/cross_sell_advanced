@@ -355,30 +355,29 @@ if ($action !== 'new_xsell') {
                 INNER JOIN " . TABLE_PRODUCTS_XSELL . " x
                     ON x.products_id = p.products_id
           ORDER BY p.products_id";   
-          
-          // Split Page
-                // reset page when page is unknown
-                if ((empty($_GET['page']) || $_GET['page'] == '1') && !empty($_GET['xsell_main_pid'])) {
-                    $check_page = $db->Execute($xsells_query_raw);
-                    if ($check_page->RecordCount() > MAX_DISPLAY_SEARCH_RESULTS) {
-                        $check_count = 0;
-                        foreach ($check_page as $item) {
-                            if ((int)$item['xsell_main_pid'] === (int)$_GET['xsell_main_pid']) {
-                                break;
-                            }
-                            $check_count++;
-                        }
-                        $_GET['page'] = round((($check_count / MAX_DISPLAY_SEARCH_RESULTS) + (fmod_round($check_count, MAX_DISPLAY_SEARCH_RESULTS) !== 0 ? .5 : 0)));
-                        $page = $_GET['page'];
-                    } else {
-                        $_GET['page'] = 1;
-                    }
-                }
-          
-     $xsells_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $xsells_query_raw, $xsells_query_numrows);
 
-    
-     $current_xsells = $db->Execute($xsells_query_raw);
+    // Split Page
+    // reset page when page is unknown
+    if ((empty($_GET['page']) || $_GET['page'] == '1') && !empty($_GET['xsell_main_pid'])) {
+        $check_page = $db->Execute($xsells_query_raw);
+        if ($check_page->RecordCount() > MAX_DISPLAY_SEARCH_RESULTS) {
+            $check_count = 0;
+            foreach ($check_page as $item) {
+                if ((int)$item['xsell_main_pid'] === (int)$_GET['xsell_main_pid']) {
+                    break;
+                }
+                $check_count++;
+            }
+            $_GET['page'] = round((($check_count / MAX_DISPLAY_SEARCH_RESULTS) + (fmod_round($check_count, MAX_DISPLAY_SEARCH_RESULTS) !== 0 ? .5 : 0)));
+            $page = $_GET['page'];
+        } else {
+            $_GET['page'] = 1;
+        }
+    }
+
+    $xsells_split = new splitPageResults($_GET['page'], MAX_DISPLAY_SEARCH_RESULTS, $xsells_query_raw, $xsells_query_numrows);
+
+    $current_xsells = $db->Execute($xsells_query_raw);
 
     $no_xsells = $current_xsells->EOF;
 
