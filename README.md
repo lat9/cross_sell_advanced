@@ -12,7 +12,7 @@ This version of the plugin:
 
 ***Zen Cart Download Link:*** https://www.zen-cart.com/downloads.php?do=file&id=2334
 
-For additional documentation of the plugin's admin interfaces, see [Cross Sell Admin Changes](./pages/admin_interfaces.md).
+For additional documentation of the plugin's admin interfaces, see [Cross Sell Admin Changes](https://github.com/lat9/cross_sell_advanced/wiki/Cross-Sell-Advanced-II:-Admin-Interfaces).
 
-For additional documentation of the plugin's storefront interfaces, see [Cross Sell Storefront Changes](./pages/storefront_interfaces.md)
+For additional documentation of the plugin's storefront interfaces, see [Cross Sell Storefront Changes](https://github.com/lat9/cross_sell_advanced/wiki/Cross-Sell-Advanced-II:-Storefront-Changes)
 
