@@ -11,7 +11,7 @@ if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
 
-define('XSELL_CURRENT_VERSION', '2.0.3');
+define('XSELL_CURRENT_VERSION', '2.0.4-beta1');
 
 // -----
 // Only update configuration when an admin is logged in.
@@ -75,7 +75,7 @@ if (!$result->EOF) {
 
             ('Cross-Sell Products Columns per Row', 'SHOW_PRODUCT_INFO_COLUMNS_XSELL_PRODUCTS', '3', 'Identify the number of cross-sells to display per row (on the storefront).  Set the value to <em>0</em> to display <em>all</em> products on a single row.  Default: <b>3</b>.', $cgi, 30, now(), NULL, NULL),
             
-            ('Cross-Sell - Display prices?', 'XSELL_DISPLAY_PRICE', 'false', 'Cross-Sell &mdash; Do you want to display the product prices too?<br>Default: false', $cgi, 35, now(), NULL, 'zen_cfg_select_option(array(\'true\', \'false\'),'),
+            ('Cross-Sell - Display prices?', 'XSELL_DISPLAY_PRICE', 'false', 'Cross-Sell &mdash; Do you want to display the product prices too?<br>Default: false', $cgi, 35, now(), NULL, 'zen_cfg_select_option([\'true\', \'false\'],'),
 
             ('Cross Sell Advanced II Version', 'XSELL_VERSION', '0.0.0', 'Current <em>Cross Sell Advanced II</em> Version', $cgi, 1, now(), NULL, 'zen_cfg_read_only(')"
     );
