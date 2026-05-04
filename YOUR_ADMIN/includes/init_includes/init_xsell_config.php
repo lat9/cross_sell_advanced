@@ -1,6 +1,6 @@
 <?php
 // -----
-// Cross Sell Advanced, v2.0.0 for Zen Cart v1.5.7 and later
+// Cross Sell Advanced, v2.1.0 for Zen Cart v1.5.8 and later
 //
 // @copyright 2013 C Jones
 // $copyright 2021, lat9 (https://vinosdefrutastropicales.com).
@@ -11,7 +11,7 @@ if (!defined('IS_ADMIN_FLAG')) {
     die('Illegal Access');
 }
 
-define('XSELL_CURRENT_VERSION', '2.0.4-beta1');
+define('XSELL_CURRENT_VERSION', '2.1.0-beta2');
 
 // -----
 // Only update configuration when an admin is logged in.
