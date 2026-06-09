@@ -2,9 +2,8 @@
 <html dir="ltr" lang="en">
 <head>
 <meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Cross Sell Advanced II (Zen-Cart&reg; v1.5.8, v2.0.x, v2.1.0, v2.2.x)</title>
+<title>Cross Sell Advanced II (Zen-Cart&reg; v2.1.0, v2.2.x)</title>
 <style>
 body, p, h1, h2, h3, h4, h5, h6, li, td, dd, dt, table, img {
   font-family: Verdana, AvantGarde, Tahoma, Arial, sans-serif;
@@ -60,16 +59,15 @@ tr td:first-child {
 </style>
 </head>
 <body>
-<h1>Cross Sell Advanced II for Zen Cart&reg; v1.5.8 and later</h1>
-<h3>Version 2.1.0</h3>
+<h1>Cross Sell Advanced II for Zen Cart&reg; v2.1.0 and later</h1>
+<h3>Version 3.0.0</h3>
 <p>Copyright (c) 2022-2026, <a href="https://vinosdefrutastropicales.com" target="_blank" rel="noopener noreferrer">Vinos de Frutas Tropicales</a> (lat9)</p>
 <p>Based on <em>Cross Sell Advanced v1.5</em> (https://www.zen-cart.com/downloads.php?do=file&id=400) which, itself, was based on the original Cross Sell add-on (https://www.zen-cart.com/downloads.php?do=file&id=2, Cross Sell by Merlin/DrByte).</p>
 <p>Current support thread at Zen Cart Forums: <a href="https://www.zen-cart.com/showthread.php?211884-Cross-Sell-Advanced-Support-Thread" target="_blank">https://www.zen-cart.com/showthread.php?211884-Cross-Sell-Advanced-Support-Thread</a>.  This software is provided for your use under the GNU General Public License.</p>
 <p>Current Zen Cart download: <a href="https://www.zen-cart.com/downloads.php?do=file&id=2334" target="_blank">https://www.zen-cart.com/downloads.php?do=file&id=2334</a>.</p>
 <p><b>Notes:</b></p>
 <ol>
-    <li>This plugin requires <em>Zen Cart v1.5.8 or later</em> for its proper operation!</li>
-    <li>The plugin's installation requires <em>hand-editing</em> of one or more product-information display templates.</li>
+    <li>This plugin requires <em>Zen Cart v2.1.0 or later</em> for its proper operation!</li>
     <li>For additional information, refer to the plugin's on-line documentation:<ul>
         <li><a href="https://github.com/lat9/cross_sell_advanced/wiki/Cross-Sell-Advanced-II:-Admin-Interfaces" target="_blank">Admin Interfaces</a></li>
         <li><a href="https://github.com/lat9/cross_sell_advanced/wiki/Cross-Sell-Advanced-II:-Storefront-Changes" target="_blank">Storefront Changes</a></li>
@@ -79,54 +77,29 @@ tr td:first-child {
 <h2>What it does</h2>
 <p>This Zen Cart plugin enables a site to &quot;cross-sell&quot; products.  An admin tool is provided that is used to 'connect' the various cross-sells for the site and a simple storefront 'centerbox' is provided for the cross-sells' display.  Additional documentation can be found on the plugin's GitHub <a href="https://github.com/lat9/cross_sell_advanced/blob/main/README.md" rel="noopener noreferrer" target="_blank">repository</a>.</p>
 
-<h2>Installation</h2>
-<p>There are no core-file overwrites in this plugin, but you should <strong>always</strong> backup your cart's database and files prior to making any changes.</p>
+<h2>Installing and Uninstalling</h2>
+<p>Starting with v3.0.0, this is released as a Zen Cart <em>encapsulated plugin</em>, so installation (and removal) is simplified.</p>
+<h3>Installing</h3>
+<ol>
+    <li><em>Merge</em> the plugin's <code>/zc_plugins</code> directory with your site's pre-existing <code>/zc_plugins</code> directory.</li>
+    <li>Log into your Zen Cart admin panel.</li>
+    <li>Use the admin menus, navigating to <em>Modules :: Plugin Manager</em>.</li>
+    <li>You'll see a plugin named <b>Cross Sell Advanced II</b>; click the <em>Install</em> button for the plugin.  That's it!</li>
+</ol>
+<h3>Installing the Database I/O Manager Handler</h3>
+<p><em>Cross Sell Advanced II</em> also provides a <a href="https://www.zen-cart.com/downloads.php?do=file&id=2091" target="_blank">DbIo</a> handler to make it easier for you to export and import your site's cross sells. Those files are installed separately.</p>
 <p>Copy the following files to your cart's installation, after renaming the &quot;YOUR_ADMIN&quot; directory to match your custom admin's name:</p>
 <ol>
-    <li>/includes/extra_datafiles/xsell_definitions.php</li>
-    <li><span class="added">/includes/languages/english/extra_definitions/lang.xsell_products_definitions.php</span></li>
-    <li><span class="removed">/includes/languages/english/extra_definitions/xsell_products_definitions.php</span></li>
-    <li>/includes/modules/xsell2_products.php</li>
-    <li>/includes/templates/bootstrap/templates/tpl_modules_xsell2_products.php</li>
-    <li>/includes/templates/template_default/templates/tpl_modules_xsell2_products.php</li>
-    <li>/YOUR_ADMIN/xsell.php</li>
-    <li>/YOUR_ADMIN/includes/auto_loaders/config.xsell.php</li>
     <li>/YOUR_ADMIN/includes/classes/dbio/DbIoProductsXsellHandler.php</li>
-    <li>/YOUR_ADMIN/includes/classes/observers/XsellAdminObserver.php</li>
-    <li>/YOUR_ADMIN/includes/extra_datafiles/xsell_advanced_definitions.php <span class="smaller">(No longer used, can be safely removed)</span></li>
-    <li>/YOUR_ADMIN/includes/functions/extra_functions/cross_sell_plus_advanced_page_registration.php <span class="smaller">(No longer used, can be safely removed)</span></li>
-    <li>/YOUR_ADMIN/includes/functions/extra_functions/zen_cfg_read_only.php</li>
-    <li>/YOUR_ADMIN/includes/init_includes/init_xsell_config.php</li>
-    <li>/YOUR_ADMIN/includes/javascript/xsell.php</li>
     <li>/YOUR_ADMIN/includes/languages/english/dbio/DbIoProductsXsellHandler.php</li>
-    <li>/YOUR_ADMIN/includes/languages/english/extra_definitions/advanced_xsell_defs.php <span class="smaller">(No longer used, can be safely removed)</span></li>
-    <li><span class="added">/YOUR_ADMIN/includes/languages/english/extra_definitions/lang.x-sell_defs.php</span></li>
-    <li><span class="removed">/YOUR_ADMIN/includes/languages/english/extra_definitions/x-sell_defs.php</span></li>
-    <li><span class="added">/YOUR_ADMIN/includes/languages/english/lang.xsell.php</span></li>
-    <li><span class="removed">/YOUR_ADMIN/includes/languages/english/xsell.php</span></li>
-    <li>/YOUR_ADMIN/includes/modules/xsell/category_product_selection.php</li>
 </ol>
-<p>Now that the base files have been copied, go to your site's admin and refresh the page to cause the plugin's installation script to run.  Next step is to add the cross-sell information to your template's <code>tpl_*.info_display.php</code> files.  See <a href="https://github.com/lat9/cross_sell_advanced/wiki/Adding-the-Cross%E2%80%90Sell-Block-to-Your-Template" target="_blank" rel="noopener noreferrer">this</a> online documentation for the process.</p>
-<p><b>Note:</b> If your site is using the <a href="https://www.zen-cart.com/downloads.php?do=file&id=2191" target="_blank" rel="noopener noreferrer">ZCA Bootstrap Template</a>, don't forget to copy the file <code>/includes/templates/bootstrap/templates/tpl_modules_xsell2_products.php</code> to your &quot;clone&quot; of the template!</p>
-
-<h2>Uninstall</h2>
-<p>First, delete the files that were copied to your zen-cart installation's admin directories, then use your admin's <em>Tools-&gt;Run SQL Patches</em> to run the file <b>xsell_uninstall.sql</b>.</p>
 
 <h2>Version History:</h2>
 <ul>
-    <li>v2.1.0-beta2, 2026-05-04 (lat9, webchills):<ul>
+    <li>v3.0.0-beta1, 2026-06-08 (lat9, webchills):<ul>
+        <li>CHANGE: Convert to an <code>encapsulated</code> plugin package.</li>
+        <li>CHANGE: Distributing only array-based language files.</li>
         <li>BUGFIX: Correct admin tool's pagination ... <b>really!</b></li>
-        <li>The following files were changed, <span class="added">added</span>, or <span class="removed">removed</span>:<ol>
-            <li><span class="added">/includes/languages/english/extra_definitions/lang.xsell_products_definitions.php</span></li>
-            <li><span class="removed">/includes/languages/english/extra_definitions/xsell_products_definitions.php</span></li>
-            <li>/YOUR_ADMIN/xsell.php</li>
-            <li>/YOUR_ADMIN/includes/modules/xsell/category_product_selection.php</li>
-            <li>/YOUR_ADMIN/includes/init_includes/init_xsell_config.php</li>
-            <li><span class="added">/YOUR_ADMIN/includes/languages/english/extra_definitions/lang.x-sell_defs.php</span></li>
-            <li><span class="removed">/YOUR_ADMIN/includes/languages/english/extra_definitions/x-sell_defs.php</span></li>
-            <li><span class="added">/YOUR_ADMIN/includes/languages/english/lang.xsell.php</span></li>
-            <li><span class="removed">/YOUR_ADMIN/includes/languages/english/xsell.php</span></li>
-        </ol></li>
     </ul></li>
     <li>v2.0.3, 2024-03-19 (lat9, webchills):<ul>
         <li>BUGFIX: Correct admin tool's pagination.</li>
