@@ -86,13 +86,15 @@ tr td:first-child {
     <li>Use the admin menus, navigating to <em>Modules :: Plugin Manager</em>.</li>
     <li>You'll see a plugin named <b>Cross Sell Advanced II</b>; click the <em>Install</em> button for the plugin.  That's it!</li>
 </ol>
-<h3>Installing the Database I/O Manager Handler</h3>
-<p><em>Cross Sell Advanced II</em> also provides a <a href="https://www.zen-cart.com/downloads.php?do=file&id=2091" target="_blank">DbIo</a> handler to make it easier for you to export and import your site's cross sells. Those files are installed separately.</p>
+<h4>Installing the Database I/O Manager Handler</h4>
+<p><em>Cross Sell Advanced II</em> also provides a <a href="https://www.zen-cart.com/downloads.php?do=file&id=2091" target="_blank">DbIo</a> handler to make it easier for you to export and import your site's cross sells. Those files are installed separately and require <em>DbIo</em> v2.2.1 or later for their error-free execution.</p>
 <p>Copy the following files to your cart's installation, after renaming the &quot;YOUR_ADMIN&quot; directory to match your custom admin's name:</p>
 <ol>
     <li>/YOUR_ADMIN/includes/classes/dbio/DbIoProductsXsellHandler.php</li>
-    <li>/YOUR_ADMIN/includes/languages/english/dbio/DbIoProductsXsellHandler.php</li>
+    <li>/YOUR_ADMIN/includes/languages/english/dbio/lang.DbIoProductsXsellHandler.php</li>
 </ol>
+<h3>Uninstall</h3>
+<p>To uninstall the plugin, navigate to the admin's <em>Modules :: Plugin Manager</em>, find the line-item for <em>Cross Sell Advanced II</em> and click the <em>Un-Install</em> button.</p>
 
 <h2>Version History:</h2>
 <ul>
@@ -100,6 +102,8 @@ tr td:first-child {
         <li>CHANGE: Convert to an <code>encapsulated</code> plugin package.</li>
         <li>CHANGE: Distributing only array-based language files.</li>
         <li>BUGFIX: Correct admin tool's pagination ... <b>really!</b></li>
+        <li>CHANGE: Updating DbIo handler for DbIo v2.2.1 and later; adding type hints.</li>
+        <li>BUGFIX: Correcting <code>$this->saved</code> to <code>$this->saved_data</code>.</li>
     </ul></li>
     <li>v2.0.3, 2024-03-19 (lat9, webchills):<ul>
         <li>BUGFIX: Correct admin tool's pagination.</li>

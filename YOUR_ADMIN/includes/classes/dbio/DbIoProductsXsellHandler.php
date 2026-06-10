@@ -1,7 +1,9 @@
 <?php
 // -----
-// Part of the "Cross-Sell Advanced II" plugin for Zen Cart 1.5.7 and later.
-// Copyright (c) 2021, Vinos de Frutas Tropicales.
+// Part of the "Cross-Sell Advanced II" plugin for Zen Cart 2.1.0 and later.
+// Copyright (c) 2021-2026, Vinos de Frutas Tropicales.
+//
+// Note: Requires DbIo v2.2.1 or later; using prior versions can result in PHP Warnings/Errors!
 //
 if (!defined ('IS_ADMIN_FLAG')) {
     exit ('Illegal access');
@@ -13,28 +15,31 @@ if (!defined ('IS_ADMIN_FLAG')) {
 //
 class DbIoProductsXsellHandler extends DbIoHandler 
 {
-    const DBIO_COMMAND_ADD    = 'ADD';      //-Forces the current record to be added, so long as the data's valid!
+    protected const string DBIO_COMMAND_ADD = 'ADD';   //-Forces the current record to be added, so long as the data's valid!
 
     // -----
     // Return values from the 'importCheckIdModelMatch' method:
     //
-    const ID_MODEL_OK             = 0;  //-The supplied products_id and products_model reference the same, present product.
-    const ID_MODEL_MISMATCH       = 1;  //-The supplied products_id doesn't match its supplied products_model.
-    const MODEL_NO_EXIST          = 2;  //-The supplied products_model doesn't match any records in the 'products' table.
-    const MODEL_MULTIPLE_PRODUCTS = 3;  //-The supplied products_model matches multiple products.
-    const ID_NO_EXIST             = 4;  //-The supplied products_id doesn't exist.
+    protected const int ID_MODEL_OK             = 0;  //-The supplied products_id and products_model reference the same, present product.
+    protected const int ID_MODEL_MISMATCH       = 1;  //-The supplied products_id doesn't match its supplied products_model.
+    protected const int MODEL_NO_EXIST          = 2;  //-The supplied products_model doesn't match any records in the 'products' table.
+    protected const int MODEL_MULTIPLE_PRODUCTS = 3;  //-The supplied products_model matches multiple products.
+    protected const int ID_NO_EXIST             = 4;  //-The supplied products_id doesn't exist.
 
-    public static function getHandlerInformation()
+    public static function getHandlerInformation(): array|false
     {
         global $sniffer;
-        if (!defined('TABLE_PRODUCTS_XSELL') || !defined('XSELL_VERSION') || !$sniffer->table_exists(TABLE_PRODUCTS_XSELL)) {
-            trigger_error('Handler cannot be used; missing required database elements.', E_USER_WARNING);
+        if (!defined('TABLE_PRODUCTS_XSELL') || !$sniffer->table_exists(TABLE_PRODUCTS_XSELL)) {
+            if (!isset($_SESSION['xsell_warning_reported'])) {
+                $_SESSION['xsell_warning_reported'] = true;
+                trigger_error('ProductsXsellHandler cannot be used; missing required database elements.', E_USER_WARNING);
+            }
             return false;
         }
 
-        DbIoHandler::loadHandlerMessageFile('ProductsXsell'); 
+        DbIoHandler::loadHandlerMessageFile('ProductsXsell');
         return array (
-            'version' => '1.0.0',
+            'version' => '3.0.0',
             'handler_version' => '1.0.0',
             'include_header' => true,
             'export_only' => false,
@@ -42,7 +47,7 @@ class DbIoProductsXsellHandler extends DbIoHandler
         );
     }
 
-    public function exportInitialize($language = 'all') 
+    public function exportInitialize($language = 'all'): bool
     {
         $initialized = parent::exportInitialize($language);
         if ($initialized) {
@@ -58,31 +63,23 @@ class DbIoProductsXsellHandler extends DbIoHandler
     // -----
     // For each 'products_xsell' row's export, append the cross-sell product's model number to the output.
     //
-    // Note: Since this handler supports DbIo commands, the base class' handling has appended an empty
-    // column as the last field to hold a potential command (this handler supports REMOVE and ADD).  Need to remove that
-    // column's data from the fields prior to inserting the 'helper' columns and then add it back.
-    //
-    public function exportPrepareFields($fields) 
+    public function exportPrepareFields(array $fields): array
     {
-        $fields = parent::exportPrepareFields ($fields);
-        array_pop($fields);
         unset($fields['ID']);
-
         $fields['xsell_model'] = zen_get_products_model($fields['xsell_id']);
-        $fields['v_dbio_command'] = '';
 
-        return $fields;
+        return parent::exportPrepareFields($fields);
     }
 
 // ----------------------------------------------------------------------------------
-//             I N T E R N A L / P R O T E C T E D   F U N C T I O N S 
+//             I N T E R N A L / P R O T E C T E D   F U N C T I O N S
 // ----------------------------------------------------------------------------------
 
     // -----
     // This function, called during the overall class construction, is used to set this handler's database
     // configuration for the dbIO operations.
     //
-    protected function setHandlerConfiguration() 
+    protected function setHandlerConfiguration(): void
     {
         $this->stats['report_name'] = 'ProductsXsell';
         $this->config = self::getHandlerInformation();
@@ -129,7 +126,7 @@ class DbIoProductsXsellHandler extends DbIoHandler
     // This handler is controlling all import operations.  Check to see that the current import record
     // has valid 'keys' (i.e. products_id and xsell_id).
     //
-    protected function importCheckKeyValue($data)
+    protected function importCheckKeyValue(array $data): bool
     {
         global $db;
 
@@ -145,7 +142,7 @@ class DbIoProductsXsellHandler extends DbIoHandler
             $this->record_status = false;
             $this->debugMessage("Record not imported at line #" . $this->stats['record_count'] . "; products_id and/or products_model must be supplied.", self::DBIO_ERROR);
         } else {
-            list($rc, $products_id) = $this->importCheckIdModelMatch($products_id, $products_model);
+            [$rc, $products_id] = $this->importCheckIdModelMatch($products_id, $products_model);
             switch ($rc) {
                 case self::ID_MODEL_OK:
                     break;
@@ -181,7 +178,7 @@ class DbIoProductsXsellHandler extends DbIoHandler
                 $this->debugMessage("Record not imported at line #" . $this->stats['record_count'] . "; xsell_id and/or xsell_model must be supplied.", self::DBIO_ERROR);
             }
 
-            list($rc, $xsell_id) = $this->importCheckIdModelMatch($xsell_id, $xsell_model);
+            [$rc, $xsell_id] = $this->importCheckIdModelMatch($xsell_id, $xsell_model);
             switch ($rc) {
                 case self::ID_MODEL_OK:
                     break;
@@ -206,7 +203,7 @@ class DbIoProductsXsellHandler extends DbIoHandler
         }
 
         if ($this->record_status === true) {
-            $this->saved = [
+            $this->saved_data = [
                 'products_id' => $products_id,
                 'xsell_id' => $xsell_id,
                 'sort_order' => (int)$this->importGetFieldValue('sort_order', $data),
@@ -220,7 +217,7 @@ class DbIoProductsXsellHandler extends DbIoHandler
                   LIMIT 1"
             );
             $this->import_is_insert = $check->EOF;
-            $this->debugMessage('Key values: ' . json_encode($this->saved) . ', is_insert(' . $this->import_is_insert . ').', self::DBIO_STATUS);
+            $this->debugMessage('Key values: ' . json_encode($this->saved_data) . ', is_insert(' . $this->import_is_insert . ').', self::DBIO_STATUS);
         }
 
         return $this->record_status;
@@ -229,7 +226,7 @@ class DbIoProductsXsellHandler extends DbIoHandler
     // -----
     // Stubbed-out for this handler, the record's checking has been performed in importCheckKeyValue.
     //
-    protected function importProcessField($table_name, $field_name, $language_id, $field_value)
+    protected function importProcessField(string $table_name, string $field_name, string $language_id, ?string $field_value): void
     {
     }
 
@@ -237,7 +234,7 @@ class DbIoProductsXsellHandler extends DbIoHandler
     // For this handler, any finishing-up is to update the sort order for a pre-existing
     // cross-sell.
     //
-    protected function importFinishProcessing()
+    protected function importFinishProcessing(): void
     {
         global $db;
 
@@ -249,9 +246,9 @@ class DbIoProductsXsellHandler extends DbIoHandler
             if ($this->operation !== 'check') {
                 $db->Execute(
                     "UPDATE " . TABLE_PRODUCTS_XSELL . "
-                        SET sort_order = " . $this->saved['sort_order'] . "
-                      WHERE products_id = " . $this->saved['products_id'] . "
-                        AND xsell_id = " . $this->saved['xsell_id'] . "
+                        SET sort_order = " . $this->saved_data['sort_order'] . "
+                      WHERE products_id = " . $this->saved_data['products_id'] . "
+                        AND xsell_id = " . $this->saved_data['xsell_id'] . "
                       LIMIT 1"
                 );
             }
@@ -265,7 +262,7 @@ class DbIoProductsXsellHandler extends DbIoHandler
     // - ADD:    Forces the current xsell-record to be inserted.
     // - REMOVE: Removes a product-xsell from the database.
     //
-    protected function importHandleDbIoCommand($command, $data)
+    protected function importHandleDbIoCommand(string $command, array $data): bool
     {
         global $db;
 
@@ -292,7 +289,7 @@ class DbIoProductsXsellHandler extends DbIoHandler
                         "INSERT INTO " . TABLE_PRODUCTS_XSELL . "
                             (products_id, xsell_id, sort_order)
                          VALUES
-                            (" . $this->saved['products_id'] . ", " . $this->saved['xsell_id'] . ", " . $this->saved['sort_order'] . ")"
+                            (" . $this->saved_data['products_id'] . ", " . $this->saved_data['xsell_id'] . ", " . $this->saved_data['sort_order'] . ")"
                     );
                 }
                 break;
@@ -304,12 +301,12 @@ class DbIoProductsXsellHandler extends DbIoHandler
                 if ($this->import_is_insert) {
                     $this->debugMessage("Cross-sell not removed at line #" . $this->stats['record_count'] . "; it does not exist.", self::DBIO_WARNING);
                 } else {
-                    $this->debugMessage("Removing cross-sell for ID #" . $this->saved['products_id'] . ", xsell ID #" . $this->saved['xsell_id'], self::DBIO_STATUS);
+                    $this->debugMessage("Removing cross-sell for ID #" . $this->saved_data['products_id'] . ", xsell ID #" . $this->saved_data['xsell_id'], self::DBIO_STATUS);
                     if ($this->operation !== 'check') {
                         $db->Execute(
                             "DELETE FROM " . TABLE_PRODUCTS_XSELL . "
-                              WHERE products_id = " . $this->saved['products_id'] . "
-                                AND xsell_id = " . $this->saved['xsell_id'] . "
+                              WHERE products_id = " . $this->saved_data['products_id'] . "
+                                AND xsell_id = " . $this->saved_data['xsell_id'] . "
                               LIMIT 1"
                         );
                     }
@@ -328,7 +325,7 @@ class DbIoProductsXsellHandler extends DbIoHandler
     // a single, defined product; called from importHandleDbIoCommand.  The caller has previously
     // verified that at least one of the values isn't "empty".
     //
-    protected function importCheckIdModelMatch($products_id, $products_model)
+    protected function importCheckIdModelMatch(string $products_id, string $products_model): array
     {
         global $db;
 
